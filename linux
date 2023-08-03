@@ -1,0 +1,25 @@
+# Don't require this user to enter the password for running sudo
+Defaults:dw !authenticate
+
+# Revert the secure_path setting in /etc/sudoers. This causes PATH to be passed
+# to sudo (this happens by default without the need to add PATH to env_keep).
+Defaults !secure_path
+
+# Causes $HOME and '~' to keep pointing to the invoking user's home directory
+# instead of the root user's home directory. This is has a lot of impact for 
+# commands that use config files from $HOME such as Vim (~/.vimrc), Git
+# (~/.gitconfig), and many more. For example, 'sudo vim' will use the same Vim
+# configuration as when Vim is executed normally. Similarly, if an interactive
+# root shell is started with 'sudo -s', this shell will use the normal user's
+# ~/.bashrc file and thus all the normal user's configuration will be avilable.
+Defaults env_keep += HOME
+
+# Required for some commands like 'sudo visudo' to use the correct editor.
+Defaults env_keep += EDITOR
+
+# Required for some commands like 'sudo apt update' if a proxy is used.
+Defaults env_keep += "http_proxy https_proxy no_proxy"
+
+# TODO: are there any benfits/drawbacks from passing ALL environment variables
+# to the sudo environment?
+#Defaults !env_reset
