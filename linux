@@ -1,3 +1,5 @@
+# Source: https://github.com/weibeld/sudoers/blob/main/linux
+
 # Don't require this user to enter the password for running sudo
 Defaults:$USER !authenticate
 

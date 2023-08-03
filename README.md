@@ -14,7 +14,7 @@ curl -L https://raw.githubusercontent.com/weibeld/sudoers/main/linux | envsubst 
 
 The above saves the custom sudoers file as `/etc/sudoers.d/config` where it will be included into the default `/etc/sudoers` file.
 
-> The `envsubst` command above substitutes the `$USER` placeholder in the downloaded file with the value of the `$USER` environment variable. This is used in the setting for disabling password authentication for the current user.
+> The `envsubst` command above substitutes the `$USER` placeholder in the downloaded file with the value of the `$USER` environment variable. This is used for scoping the `!authenticate` setting for disabling password authentication only to the current user. `envsubst` is available in the `gettext` package, however, it is installed by default on macOS and many Linux distributions.
 
 ## General notes
 
