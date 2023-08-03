@@ -1,11 +1,20 @@
 # sudoers
 
-Custom sudoers settings or different platforms.
+Custom sudoers settings for different platforms.
 
 > These files are intended to be put in the `/etc/sudoers.d` directory and their settings will be applied on top of the default sudoers configuration of the corresponding platform in `/etc/sudoers`.
 
 ## Installation
 
+Install the sudoers file by executing the following as the normal user:
+
+```bash
+curl -L https://raw.githubusercontent.com/weibeld/sudoers/main/linux | envsubst | sudo tee /etc/sudoers.d/config >/dev/null
+```
+
+The above saves the custom sudoers file as `/etc/sudoers.d/config` where it will be included into the default `/etc/sudoers` file.
+
+> The `envsubst` command above substitutes the `$USER` placeholder in the downloaded file with the value of the `$USER` environment variable. This is used in the setting for disabling password authentication for the current user.
 
 ## General notes
 
