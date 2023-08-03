@@ -1,5 +1,5 @@
 # Source: https://github.com/weibeld/sudoers/blob/main/linux
-# Created on $DATE
+# Created on: $DATE
 
 # Don't require this user to enter the password for running sudo
 Defaults:$USER !authenticate

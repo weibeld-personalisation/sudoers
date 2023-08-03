@@ -6,39 +6,41 @@ Custom sudoers files for different platforms.
 
 This repository contains sudoers files for different platforms. A sudoers file defines the behaviour of the `sudo` command.
 
-Every system has a default sudoers file named `/etc/sudoers`. This file contains all the default sudoers settings and it has an include directive files in the `/etc/sudoers.d` directory. That means, all the files in the `/etc/sudoers.d` directory will be applied along with the main `/etc/sudoers` file.
+Every system has a default sudoers file named `/etc/sudoers`. This file contains all the default sudoers settings and it has an include directive for all files in the `/etc/sudoers.d` directory. That means, all the sudoers files in the `/etc/sudoers.d` directory will be applied along with the main `/etc/sudoers` file.
 
-The files in this repository are intended to be put in the `/etc/sudoers.d` directory. They take into account the default `/etc/sudoers` file on the corresponding system and are designed to be applied on top of these default settings.
+The sudoers files in this repository are intended to be put in the `/etc/sudoers.d` directory. They take into account the default `/etc/sudoers` file on the corresponding system and are designed to be applied on top of these default settings.
+
+> Note that settings in `/etc/sudoers.d` files override the settings in the `/etc/sudoers` file.
 
 ## Features
 
 The sudoers files in this repository largely implement the following common behaviour:
 
-1. The default user can use `sudo` without a password
-   - This corresponds to the user who executes the below installation command
+1. Password-less `sudo` for the default user
+   - This means that this user can use `sudo` without entering a password
 1. The `PATH` variable is passed to the `sudo` environment
    - This means that commands executed with `sudo` have the same `PATH` as the default user
 1. The `HOME` variable is passed to the `sudo` environment
-   - This means that commands executed with `sudo` use the same config files as the default user, e.g. `~/.vimrc`, `~/.bashrc`, etc.
+   - This means that commands executed with `sudo` use config files from the default user's home directory, such as `~/.vimrc`, `~/.bashrc`, etc.
 1. A few additional common variables are passed to the `sudo` environment
-   - This includes `EDITOR`, `http_proxy`, `https_proxy`, `no_proxy`
+   - Including: `EDITOR`, `http_proxy`, `https_proxy`, `no_proxy`
 
 ## Installation
 
-Run the following as the default user:
+To install the sudoers file, run the following as the default user:
 
 ```bash
 curl https://raw.githubusercontent.com/weibeld/sudoers/main/linux | DATE=$(date -Iseconds) envsubst | sudo tee /etc/sudoers.d/config >/dev/null
 ```
 
-The above saves the sudoers file for Linux as `/etc/sudoers.d/config` on the local system.
+The above saves the sudoers file for Linux as `/etc/sudoers.d/config` on the local machine.
 
 Note the following about this command:
 
 - The user for which password-less `sudo` is enabled is the user who executes the above command.
 - The `envsubst` command is needed to replace the `$USER` placeholder in the downloaded file with the value of the `USER` environment variable on the local system.
   - `envsubst` is installed by default on most systems, if it isn't, it can be installed through the `gettext` package.
-- The `DATE` variable assignment is optional and causes the current date to be included as a comment in the `/etc/sudoers.d/config` file.
+- The `DATE` variable assignment is optional and causes the current date to be included as a comment in created sudoers file.
 
 ## Notes
 
@@ -46,9 +48,9 @@ Note the following about this command:
 
 One of the most crucial settings in a sudoers file is `env_keep += HOME` which causes the `HOME` variable (as well as the `~` character) in the `sudo` environment to be set to the invoking user's `HOME` variable instead of the root user's `HOME` variable.
 
-The consequence of this is that commands executed in the `sudo` environment will use configuration files from the invoking user's home directory instead of the root user's home directory. For example, `sudo vim` will use the invoking user's `.vimrc` file and `.vim` directory, with all the familiar configurations, rather than the root user's version of these files, which are likely non-existent.
+The consequence of this is that commands executed in the `sudo` environment will use configuration files from the invoking user's home directory instead of the root user's home directory. For example, `sudo vim` will use the invoking user's `.vimrc` file and `.vim` directory, with all the familiar configurations, rather than the root user's version of these files (which are likely even non-existent).
 
-This has also effects when an interactive root shell is started with `sudo -s` (not `sudo -i` as explained below). In this case, the started shell uses the invoking user's `.bashrc` file, rather than the root user's `.bashrc` file, which may likely consist just of the default settings.
+This has also effects when an interactive root shell is started with `sudo -s` (not `sudo -i` as explained below). In this case, the started shell uses the invoking user's `.bashrc` file, including all the customisations, shell alias, shell functions, environment variables, etc., rather than the root user's `.bashrc` file.
 
 > On macOS, `env_keep += HOME` is even included in the default `/etc/sudoers` file.
 
