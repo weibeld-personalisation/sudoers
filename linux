@@ -1,5 +1,5 @@
 # Don't require this user to enter the password for running sudo
-Defaults:dw !authenticate
+Defaults:$USER !authenticate
 
 # Revert the secure_path setting in /etc/sudoers. This causes PATH to be passed
 # to sudo (this happens by default without the need to add PATH to env_keep).
