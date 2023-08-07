@@ -2,6 +2,8 @@
 
 Custom sudoers files for different platforms.
 
+> Currently, only a generic Linux version is provided (known to work on Debian/Ubuntu). A version for macOS is planned).
+
 ## Introduction
 
 This repository contains sudoers files for different platforms. A sudoers file defines the behaviour of the `sudo` command.
